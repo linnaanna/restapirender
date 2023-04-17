@@ -27,6 +27,36 @@ const uri =
 
 // Make the routes
 
+// Print all cars
+app.get("/api/getall", function (req, res) {
+  // Create connection object
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  async function connectAndFetch() {
+    try {
+      await client.connect();
+      const collection = client.db("cardb").collection("cars");
+
+      // make query with collection-object
+      var result = await collection
+        .find() // Use empty find to show all contents
+        .limit(10)
+        .toArray();
+
+      res.send(result);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      await client.close();
+      console.log("Connection closed to MONGO");
+    }
+  }
+  connectAndFetch();
+});
+
 // Print one car
 app.get("/api/:id", function (req, res) {
   // Create connection object
@@ -58,35 +88,7 @@ app.get("/api/:id", function (req, res) {
   connectAndFetchOne();
 });
 
-// Print all cars
-app.get("/api/getall", function (req, res) {
-  // Create connection object
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
 
-  async function connectAndFetch() {
-    try {
-      await client.connect();
-      const collection = client.db("cardb").collection("cars");
-
-      // make query with collection-object
-      var result = await collection
-        .find() // Use empty find to show all contents
-        .limit(10)
-        .toArray();
-
-      res.send(result);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      await client.close();
-      console.log("Connection closed to MONGO");
-    }
-  }
-  connectAndFetch();
-});
 
 // Add one car
 app.post("/api/add", function (req, res) {
