@@ -42,7 +42,7 @@ app.get("/api/getall", function (req, res) {
 
       // make query with collection-object
       var result = await collection
-        .find() // Use empty find to show all contents
+        .find({}) // Use empty find to show all contents
         .limit(10)
         .toArray();
 
