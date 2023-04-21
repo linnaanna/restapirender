@@ -43,7 +43,7 @@ app.get("/api/getall", function (req, res) {
       // make query with collection-object
       var result = await collection
         .find({}) // Use empty find to show all contents
-        .limit(10)
+        .limit(20)
         .toArray();
 
       res.send(result);
@@ -75,7 +75,7 @@ app.get("/api/:id", function (req, res) {
       const collection = client.db("cardb").collection("cars");
 
       // make query with collection-object
-      var result = await collection.find(query).limit(10).toArray();
+      var result = await collection.find(query).limit(20).toArray();
 
       res.send(result);
     } catch (e) {
@@ -114,7 +114,7 @@ app.post("/api/add", function (req, res) {
       // make query with collection-object
       var result = await collection
         .find() // Use empty find to show all contents
-        .limit(10)
+        .limit(20)
         .toArray();
 
       res.send(result);
@@ -144,10 +144,13 @@ app.put("/api/update/:id", function (req, res) {
       await client.connect();
       const collection = client.db("cardb").collection("cars");
 
-      collection.updateOne({ id: req.params.id }, { $set: { year: 2013 } });
+      collection.updateOne({ id: req.params.id }, { $set: { id: req.body.id,
+            brand: req.body.brand,
+            model: req.body.model,
+            year: req.body.year, } });
 
       // make query with collection-object
-      var result = await collection.find(query).limit(10).toArray();
+      var result = await collection.find(query).limit(20).toArray();
 
       res.send(result);
     } catch (e) {
@@ -181,7 +184,7 @@ app.delete("/api/delete/:id", function (req, res) {
       // make query with collection-object
       var result = await collection
         .find() // Use empty find to show all contents
-        .limit(10)
+        .limit(20)
         .toArray();
 
       res.send(result);
